@@ -14,7 +14,20 @@ async function getLivrosAPI() {
     livros = await res.json();
     console.table(livros);
 
-    mostrarNaTela(livros);
+    let livrosDesconto = aplicarDesconto(livros);
+
+    console.table(livrosDesconto)
+
+    mostrarNaTela(livrosDesconto);
+}
+
+function aplicarDesconto(listaLivros) {
+    const desconto = 0.3;
+    let livroDesconto = listaLivros.map(livro => {
+        return {...livro, preco: livro.preco -(livro.preco * desconto)}
+    });
+
+    return livroDesconto;
 }
 
 function mostrarNaTela(listaLivros) { 
@@ -26,11 +39,11 @@ function mostrarNaTela(listaLivros) {
                     alt="${livro.alt}" />
                 <h2 class="livro__titulo">${livro.titulo}</h2>
                 <p class="livro__descricao">${livro.autor}</p>
-                <p class="livro__preco" id="preco">R$ ${livro.preco}</p>
+                <p class="livro__preco" id="preco">R$ ${livro.preco.toFixed(2)}</p>
                 <div class="tags">
                     <span class="tag">${livro.categorias}</span>
                 </div>
             </div>
         `
-    })
+    });
 }

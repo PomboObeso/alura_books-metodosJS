@@ -25,6 +25,22 @@ function filtrarLivros() {
     const categoria = btn.value;
     let livrosFiltrados = categoria == 'disponivel' ? livros.filter(livro => livro.quantidade > 0) : livros.filter(livro => livro.categoria == categoria);
     mostrarNaTela(livrosFiltrados);
+    if(categoria == 'disponivel') {
+        const valorTotalDisponivel = calcularValorTotalDisponivel(livrosFiltrados);
+        exibirValorTotal(valorTotalDisponivel);
+    }
+}
+
+function calcularValorTotalDisponivel(livros) {
+    return livros.reduce((acc, livro) => acc + livro.preco, 0).toFixed(2);
+}
+
+function exibirValorTotal(valorTotal) {
+    livrosTotalDisponiveis.innerHTML = `
+        <div class="livros__disponiveis">
+        <p>Todos os livros disponíveis por R$ <span id="valor">R$ ${valorTotal}</span></p>
+        </div>
+    `
 }
 
 async function getLivrosAPI() {
@@ -50,6 +66,7 @@ function aplicarDesconto(listaLivros) {
 }
 
 function mostrarNaTela(listaLivros) {
+    livrosTotalDisponiveis.innerHTML = '';
     elementoLivros.innerHTML = '' 
     listaLivros.forEach(livro => {
         let disponilibilidade = verificaQuantidade(livro);

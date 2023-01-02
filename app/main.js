@@ -6,7 +6,16 @@ getLivrosAPI();
 
 const elementoLivros = document.getElementById('livros');
 
+const btns = document.querySelectorAll('.btn');
 
+btns.forEach(btn => btn.addEventListener('click', filtrarLivros))
+
+function filtrarLivros() {
+    const btn = document.getElementById(this.id);
+    const categoria = btn.value;
+    let livrosFiltrados = livros.filter(livro => livro.categoria == categoria);
+    mostrarNaTela(livrosFiltrados);
+}
 
 async function getLivrosAPI() {
     const res = await fetch(endpointAPI);
@@ -30,7 +39,8 @@ function aplicarDesconto(listaLivros) {
     return livroDesconto;
 }
 
-function mostrarNaTela(listaLivros) { 
+function mostrarNaTela(listaLivros) {
+    elementoLivros.innerHTML = '' 
     listaLivros.forEach(livro => {
         elementoLivros.innerHTML += 
         `
@@ -41,7 +51,7 @@ function mostrarNaTela(listaLivros) {
                 <p class="livro__descricao">${livro.autor}</p>
                 <p class="livro__preco" id="preco">R$ ${livro.preco.toFixed(2)}</p>
                 <div class="tags">
-                    <span class="tag">${livro.categorias}</span>
+                    <span class="tag">${livro.categoria}</span>
                 </div>
             </div>
         `
